@@ -28,7 +28,6 @@ $(function() {
 	}
 	else
 	{
-		window.alert("Deja, per ilgai buvote neaktyvus ir Jusu sesija baigesi.");
 		Logout();
 	}
 });

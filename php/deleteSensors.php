@@ -1,12 +1,10 @@
 <?php
-$servername = "localhost";
-$username = "admin";
-$password = "admin";
-$dbname = "administration";
-
 $sensorNames = $_REQUEST['sensors'];
+include 'mysecondfile.php';
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Create connection
+$conn = new mysqli($db_config['servername'], $db_config['username'], $db_config['password'], $db_config['dbname']);
+
 
 if ($conn->connect_error) {
 	echo "connectionError";

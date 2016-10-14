@@ -7,5 +7,8 @@ $ts1 = strtotime($datetime1);
 $ts2 = strtotime($datetime2);
 
 $seconds_diff = $ts2 - $ts1;
-echo $datetime2;
+include 'config.php';
+
+
+echo $db_config['servername'];
 ?>

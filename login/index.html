@@ -32,19 +32,14 @@
   </div>
 </div>
     <script src="\savDarbas\assets\js\jquery.min.js"></script>
+	<script src="\savDarbas\assets\js\authenticate.js"></script>
 
         <script>
+function Logout()
+{
+	document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
+}
 $(document).ready(function() {
-	var authResult = $.ajax({
-		type: "POST",
-		url: "/savDarbas/login/authenticate.php",
-		async: false
-	}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
-		
-	if(authResult == "true")
-	{
-		window.location = "http://localhost:8080/savDarbas/index.html"
-	}
   
   var animating = false,
       submitPhase1 = 1100,
@@ -105,7 +100,7 @@ $(document).ready(function() {
         animating = false;
         $(that).removeClass("success processing");
       }, submitPhase2);
-	  window.location = "http://localhost:8080/savDarbas/index.html";
+	  window.location = "http://markan2.stud.if.ktu.lt/savDarbas/index.html";
     }, submitPhase1);
 	
 	function login(){
