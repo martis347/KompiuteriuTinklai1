@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Login/Logout animation concept</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+    <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Open+Sans'>
+        <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div class="cont">
+  <div class="demo">
+    <div class="login">
+      <div class="login__check"></div>
+      <div class="login__form">
+        <div class="login__row">
+          <svg class="login__icon name svg-icon" viewBox="0 0 20 20">
+            <path d="M0,20 a10,8 0 0,1 20,0z M10,0 a4,4 0 0,1 0,8 a4,4 0 0,1 0,-8" />
+          </svg>
+          <input type="text" class="login__input name" id="Username"/>
+        </div>
+        <div class="login__row">
+          <svg class="login__icon pass svg-icon" viewBox="0 0 20 20">
+            <path d="M0,20 20,20 20,8 0,8z M10,13 10,16z M4,8 a6,8 0 0,1 12,0" />
+          </svg>
+          <input type="password" class="login__input pass" id="Password"/>
+        </div>
+        <button type="button" class="login__submit">Prisijungti</button>
+        <p class="login__signup">Don't have an account? &nbsp;<a>Sign up</a></p>
+      </div>
+    </div>  
+  </div>
+</div>
+    <script src="\savDarbas\assets\js\jquery.min.js"></script>
+
+        <script>
+$(document).ready(function() {
+	var authResult = $.ajax({
+		type: "POST",
+		url: "/savDarbas/login/authenticate.php",
+		async: false
+	}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
+		
+	if(authResult == "true")
+	{
+		window.location = "http://localhost:8080/savDarbas/index.html"
+	}
+  
+  var animating = false,
+      submitPhase1 = 1100,
+      submitPhase2 = 400,
+      logoutPhase1 = 800,
+      $login = $(".login"),
+      $app = $(".app");
+  
+  function ripple(elem, e) {
+    $(".ripple").remove();
+    var elTop = elem.offset().top,
+        elLeft = elem.offset().left,
+        x = e.pageX - elLeft,
+        y = e.pageY - elTop;
+    var $ripple = $("<div class='ripple'></div>");
+    $ripple.css({top: y, left: x});
+    elem.append($ripple);
+  };
+  
+  $(document).on("click", ".login__submit", function(e) {
+	if($("#Password").val() === "")
+	{
+		window.alert("Slaptažodžio laukas negali būti tuščias");
+		return;
+	}
+	if($("#Username").val() === "")
+	{
+		window.alert("Vartotojo vardo laukas negali būti tuščias");
+		return;
+	}
+	
+    if (animating) return;
+    animating = true;
+    var that = this;
+    ripple($(that), e);
+    $(that).addClass("processing");
+	var loginResult = login();
+	if(loginResult[0] === "failed")
+		{
+			setTimeout(function() {
+				$(that).removeClass("processing");
+				window.alert("Neteisingas vartotojo vardas arba slaptažodis");
+			}, submitPhase1);
+			animating = false;
+			return;
+		}
+    setTimeout(function() {
+		
+      $(that).addClass("success");
+      setTimeout(function() {
+        $app.show();
+        $app.css("top");
+        $app.addClass("active");
+      }, submitPhase2 - 70);
+      setTimeout(function() {
+        $login.hide();
+        $login.addClass("inactive");
+        animating = false;
+        $(that).removeClass("success processing");
+      }, submitPhase2);
+	  window.location = "http://localhost:8080/savDarbas/index.html";
+    }, submitPhase1);
+	
+	function login(){
+		var result = $.ajax({
+			type: "POST",
+			url: "/savDarbas/login/login.php",
+			async: false,
+			data: {username: $("#Username").val(), password: $("#Password").val()}
+		}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
+		
+		return result;
+	}
+  }); 
+});	
+		</script>
+  </body>
+</html>
