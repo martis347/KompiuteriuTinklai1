@@ -1,5 +1,5 @@
 <?php
-include 'mysecondfile.php';
+include 'config.php';
 
 
 // Create connection

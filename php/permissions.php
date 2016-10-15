@@ -3,7 +3,7 @@ error_reporting(0);
 ?>
 
 <?php
-include 'mysecondfile.php';
+include 'config.php';
 
 
 // Create connection

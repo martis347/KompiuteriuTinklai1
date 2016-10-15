@@ -1,7 +1,7 @@
 $(function() {
   var authResult = $.ajax({
 		type: "POST",
-		url: "/savDarbas/login/authenticate.php",
+		url: "/savDarbas/php/authenticate.php",
 		async: false
 	}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
 		

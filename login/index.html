@@ -106,7 +106,7 @@ $(document).ready(function() {
 	function login(){
 		var result = $.ajax({
 			type: "POST",
-			url: "/savDarbas/login/login.php",
+			url: "/savDarbas/php/login.php",
 			async: false,
 			data: {username: $("#Username").val(), password: $("#Password").val()}
 		}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");

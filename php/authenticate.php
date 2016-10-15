@@ -3,8 +3,7 @@ error_reporting(0);
 ?>
 
 <?php
-include 'mysecondfile.php';
-
+include 'config.php';
 
 // Create connection
 $conn = new mysqli($db_config['servername'], $db_config['username'], $db_config['password'], $db_config['dbname']);

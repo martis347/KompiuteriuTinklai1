@@ -1,7 +1,7 @@
 <?php
 $sensorName = $_REQUEST['sensor'];
 
-include 'mysecondfile.php';
+include 'config.php';
 // Create connection
 $conn = new mysqli($db_config['servername'], $db_config['username'], $db_config['password'], $db_config['dbname']);
 

@@ -4,7 +4,7 @@ $lastName = $_POST['lastName'];
 $userUsername = $_POST['username'];
 $userType = $_POST['accountType'];
 
-include 'mysecondfile.php';
+include 'config.php';
 
 
 // Create connection
