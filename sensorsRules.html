@@ -1,26 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"/>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png"/>
 
     <title>Titulinis </title>
 
     <!-- Bootstrap core CSS -->
-    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap.css" rel="stylesheet"/>
 
 
     <!-- Custom styles for this template -->
-    <link href="assets/css/main.css" rel="stylesheet">
-
+    <link href="assets/css/main.css" rel="stylesheet"/>
     <script src="\savDarbas\assets\js\jquery.min.js"></script>
-    <script src="assets/js/hover.zoom.js"></script>
+	<script src="assets/js/hover.zoom.js"></script>
     <script src="assets/js/hover.zoom.conf.js"></script>
 	<script src="\savDarbas\assets\js\authenticate.js"></script>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -28,6 +28,16 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
   </head>
+  <style>
+  
+	#rulesTable i{
+		cursor:pointer;
+		opacity:0;
+	}
+	#rulesTable tr:hover i{
+		opacity: 1;
+	}
+  </style>
   <body>
 
     <!-- Static navbar -->
@@ -60,29 +70,40 @@
 	<!-- +++++ Welcome Section +++++ -->
 	<div id="ww">
 	    <div class="container">
-			<div class="col centered">
-					<h1>Jutiklių parodymų istorija</h1>
-			</div>
-			
-			<div style="max-height: 400px; overflow-y: auto;" >
-					
-				<table class = "table table-striped table-hover table-scrollable" id="history">
-					   <thead>
+			<div class="row">
+				<h1 class="centered">Jutiklių taisyklės</h1>
+				<div style="display:-webkit-inline-box">
+				<div style="margin-left: 150px; width:auto; max-height: 150px; overflow-y: auto;">
+					<table class = "table table-striped table-hover table-scrollable;" id="sensorsTable" style="width:auto">
+					    <thead>
 						  <tr>
-							 <th style="width:40px"><input type="checkbox" onclick="SelectAll()"/>&nbsp;</th>
-							 <th>Jutiklio pavadinimas</th>
-							 <th>Temperatūra</th>
-							 <th>Įrašymo data</th>
+							 <th>Jutiklių sąrašas</th>
 						  </tr>
 					   </thead>					   
-				</table>
-			</div><!-- /row -->
-			<div class="col-lg-8 col-lg-offset-2 centered">
-				<button  type="button" class="btn btn-default" onclick="DeleteSelected()">Trinti pažymėtus</button>
-			</div>
-			
+					</table>
+					</div>
+				<div>
+					<div class="form-group" style="margin-left:50px; margin-bottom: auto; display:-webkit-inline-box">
+						<label style="margin-top:10px;" for="rule">Nauja taisyklė:</label>
+						<input class="form-control" style="width:400px; margin-left:10px;" id="rule" placeholder="[ laukas1 laukas2 ] < [ vidus1 vidus2 ] : 30" />
+					</div>
+					<div>
+							<button type="button" class="btn btn-default" onclick="AddRule()" style="margin-left: 164px; margin-bottom: 100px;">Pridėti taisyklę</button>
+					</div>
+					
+				</div>
+				<div style="margin-left: 150px; width:auto; max-height: 150px; overflow-y: auto;">
+					<table class = "table table-striped table-hover table-scrollable" id="rulesTable" >
+						<thead>
+						  <tr>
+							 <th>Taisyklių sąrašas</th>
+						  </tr>
+					   </thead>					   
+					</table>
+				</div>
 
-			
+				</div><!-- /col-lg-8 -->
+			</div><!-- /row -->
 	    </div> <!-- /container -->
 	</div><!-- /ww -->
 	
@@ -102,7 +123,7 @@
 						+34 9054 5455, <br/>
 						Madrid, Spain.
 					</p>
-				</div><!-- /col-lg-4 -->
+				</div>
 				
 				<div class="col-lg-4">
 					<h4>My Links</h4>
@@ -129,63 +150,81 @@
 		document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
 		window.location = "http://localhost:8080/savDarbas/login/index.html";
 	}
-	
-	function GetSensorsValues()
+	function GetSensors()
 	{
 		var result = $.ajax({
-				type: "POST",
-				url: "/savDarbas/php/sensorsHistory.php",
-				async: false
-			}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
-						
-			for(var i = 0; i<result.length; i+=4)
-			{
-				if(result[i] !== "" && result[i] !== "0")
-				{
-					AppendItem(result[i],result[i+1],result[i+2] + " " + result[i+3]);
-				}
-			}	
-	}
-	function AppendItem(name, value, date)
-	{
-		$("#history").append("<tr><td><input type='checkbox' />&nbsp;</td><td>" + name + "</td><td>" + value + "</td><td>" + date + "</td></tr>");
-	}
-	
-	function SelectAll()
-	{
-		$("#history input").prop("checked", $("#history input").prop("checked"));	
-	}
-	
-	function DeleteSelected()
-	{
-		var values = $("#history td");
-		var deletable = [];
-		for(var i=0; i< values.length; i++)
+			type: "POST",
+			url: "/savDarbas/php/getSensors.php",
+			async: false
+		}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
+		
+		if(result[0] == "0")
 		{
-			if($(values[i].getElementsByTagName("input")[0]).prop("checked"))
-			{
-				var toDelete = [values[i+1].innerHTML, 
-					values[i+2].innerHTML, 
-					values[i+3].innerHTML, ]
-					
-				deletable.push(toDelete);
-			}
+			return [ ];
 		}
+		return result;
+	}
+	function GetRules()
+	{
+		var result = $.ajax({
+			type: "POST",
+			url: "/savDarbas/php/getRules.php",
+			async: false
+		}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(",");
+		
+		if(result[0] == "0")
+		{
+			return [ ];
+		}
+		return result;
+	}
+	function AddRule()
+	{
+		var rule = $("#rule").val();
+		
+		if(rule === "")
+			window.alert("Taisyklė negali būti tuščia");
+		else{
+			var result = $.ajax({
+				type: "POST",
+				url: "/savDarbas/php/addRule.php",
+				async: false,
+				data:{rule:rule}
+			}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
+		}
+		
+		
+		window.location.reload();
+	}
+	function DeleteRule(ruleValue)	{
 		var result = $.ajax({
 				type: "POST",
-				url: "/savDarbas/php/deleteSensorsHistory.php",
+				url: "/savDarbas/php/removeRule.php",
 				async: false,
-				data:{toDelete:deletable}
-			}).responseText;
-			
-		window.location.reload();	
+				data:{rule:ruleValue}
+		}).responseText;
+		$("#rulesTable tr td").each(function(a, b){ 
+			if(b.textContent === ruleValue){
+				$(this).parent().remove();
+			}
+		});
 	}
-	
-	
 	$(document).ready(function() {
-		GetSensorsValues();
+		var sensors = GetSensors();
+		var rules = GetRules();
+		sensors.forEach(function(sensor){
+			if(sensor !== "")
+			{
+				$("#sensorsTable").append("<tr><td>" + sensor + "</td></tr>");
+			}
+		});
 		
-		
+		rules.forEach(function(rule){
+			if(rule !== " " && rule !== "")
+			{
+				$("#rulesTable").append("<tr><td>" + rule + "</td><td><i class='material-icons w3-large' id='icon' onClick='DeleteRule(`" + rule + "`)'>close</i></td></tr>");
+			}
+		});
 	});
 	</script>
     <!-- Bootstrap core JavaScript

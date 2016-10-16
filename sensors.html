@@ -65,6 +65,7 @@
 			<li><a href="sensors.html" style="display:none" id="sensors">Jutikliai</a></li>
 			<li><a href="sensorsHistory.html" style="display:none" id="sensorsHistory">Jutiklių istorija</a></li>
 			<li><a href="sensorsControl.html" style="display:none" id="sensorsControl">Jutiklių valdymas</a></li>
+			<li><a href="sensorsRules.html" style="display:none" id="sensorsRules">Jutiklių taisyklės</a></li>
             <li><a href="about.html" style="display:none" id="allHistory">Visa istorija</a></li>
             <li><a href="blog.html" style="display:none" id="allUsers">Visi vartotojai</a></li>
             <li><a href="aboutMe.html">Mano duomenys</a></li>
@@ -82,15 +83,26 @@
 					<h1>Sensorių informacija</h1>
 				</div><!-- /col-lg-8 -->
 			</div><!-- /row -->
-	   
-	   <div id="table" class="row">
-			<table>
-			  <tr>
-				<th>Jutiklio pavadinimas</th>
-				<th>Dabartinė temperatūra</th>
-			  </tr>
-			</table>
+	   <div style="display:-webkit-inline-box">
+		   <div id="table" style="width:40%">
+			    <label style="font-size: 20px;">Jutiklių informacija realiu laiku</label>
+
+				<table class="table table-striped table-hover">
+				  <tr>
+					<th>Jutiklio pavadinimas</th>
+					<th>Dabartinė temperatūra</th>
+				  </tr>
+				</table>
 			</div>
+			<div id="alerts" style="width:50%; margin-left:200px;">
+				<label style="font-size: 20px;">Jutiklių užfiksuoti įspėjimai</label>
+				<table class="table table-striped table-hover">
+				  <tr>
+					<th>Pažeista taisyklė</th>
+				  </tr>
+				</table>
+			</div>
+		</div>
 			 </div> <!-- /container -->
 	</div><!-- /ww -->
 	
@@ -196,6 +208,32 @@
 			$("#table tr td:odd").each(function(item, value){
 					value.innerHTML = temperatures[item];
 				});
+				
+			var alerts = false;
+			alert = "";
+			allAlerts = [];
+			temperatures.forEach(function(value){
+			if(value === "A:" && alerts){
+				  allAlerts.push(alert);
+				  alert = "";
+			}
+			else if(alerts && value !== ""){
+				  alert+= value + " ";
+			}
+			   else if(value === "A:"){
+				  alerts=true;
+			}
+			})
+			allAlerts.push(alert);
+			
+			$("#alerts tbody").find("tr:gt(0)").remove();
+			allAlerts.forEach(function(value){
+				$("#alerts tbody").append("<tr><td>" + value + "</td></tr>");
+			});
+			
+			
+			
+			
 		}, 2000);		
 	});
 	</script>
