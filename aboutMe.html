@@ -1,167 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
-
-    <title>Mano duomenys</title>
-
-    <link href="assets/css/bootstrap.css" rel="stylesheet">
-    <link href="assets/css/main.css" rel="stylesheet">
-    <script src="\savDarbas\assets\js\jquery.min.js"></script>
-    <script src="assets/js/hover.zoom.js"></script>
-    <script src="assets/js/hover.zoom.conf.js"></script>
-	<script src="\savDarbas\assets\js\authenticate.js"></script>
-  </head>
-
-  <body>
-    <div class="navbar navbar-inverse navbar-static-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="index.html">Titulinis</a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="work.html" style="display:none">Work</a></li>
-			<li><a href="sensors.html" style="display:none" id="sensors">Jutikliai</a></li>
-			<li><a href="sensorsHistory.html" style="display:none" id="sensorsHistory">Jutiklių istorija</a></li>
-			<li><a href="sensorsControl.html" style="display:none" id="sensorsControl">Jutiklių valdymas</a></li>
-			<li><a href="sensorsRules.html" style="display:none" id="sensorsRules">Jutiklių taisyklės</a></li>
-            <li><a href="allHistory.html" style="display:none" id="allHistory">Visa istorija</a></li>
-            <li><a href="allUsers.html" style="display:none" id="allUsers">Visi vartotojai</a></li>
-            <li><a href="aboutMe.html">Mano duomenys</a></li>
-			<li><a href="#" style="color:darkgreen;" class="glyphicon glyphicon-log-out" onclick="Logout()">Atsijungti</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-	<div id="ww">
-	    <div class="container">
-			<div class="row">
-				<div class="col-lg-8 col-lg-offset-2 centered">
-					<img src="assets/img/user.png" alt="Stanley">
-					<h1>Vartotojo duomenys</h1>
-					
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+		<title>Mano duomenys</title>
+		<link href="assets/css/bootstrap.css" rel="stylesheet">
+		<link href="assets/css/main.css" rel="stylesheet">
+		<script src="\savDarbas\assets\js\jquery.min.js"></script>
+		<script src="assets/js/hover.zoom.js"></script>
+		<script src="assets/js/hover.zoom.conf.js"></script>
+		<script src="\savDarbas\assets\js\authenticate.js"></script>
+	</head>
+	<body>
+		<div class="navbar navbar-inverse navbar-static-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="index.html">Titulinis</a>
 				</div>
-					
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="work.html" style="display:none">Work</a></li>
+						<li><a href="sensors.html" style="display:none" id="sensors">Jutikliai</a></li>
+						<li><a href="sensorsHistory.html" style="display:none" id="sensorsHistory">Jutiklių istorija</a></li>
+						<li><a href="sensorsControl.html" style="display:none" id="sensorsControl">Jutiklių valdymas</a></li>
+						<li><a href="sensorsRules.html" style="display:none" id="sensorsRules">Jutiklių taisyklės</a></li>
+						<li><a href="allHistory.html" style="display:none" id="allHistory">Visa istorija</a></li>
+						<li><a href="allUsers.html" style="display:none" id="allUsers">Visi vartotojai</a></li>
+						<li><a href="aboutMe.html">Mano duomenys</a></li>
+						<li><a href="#" style="color:darkgreen;" class="glyphicon glyphicon-log-out" onclick="Logout()">Atsijungti</a></li>
+					</ul>
 				</div>
-					<div>
-					<form class="form-horizontal">
-					  <div class="form-group">
-						  <label for="name">Vardas:</label>
-						  <input class="form-control" id="name" placeholder="Jūsų vardas" >
-						</div>
-						<div class="form-group">
-						  <label for="lastName">Pavardė:</label>
-						  <input class="form-control" id="lastName" placeholder="Jūsų pavardė" >
-						</div>
-						<div class="form-group">
-						  <label for="username">Vartotojo vardas:</label>
-						  <input class="form-control" id="username" placeholder="Jūsų slapyvardis" >
-						</div>
-						<div class="form-group">
-						  <label for="userType">Vartotojo tipas:</label>
-						  <input class="form-control" id="accountType" readonly>
-						</div>
-						<div class="form-group">
-						  	<button type="button" class="btn btn-default" onclick="updateUser()">Atnaujinti duomenis</button>
-						</div>
-					  </form>
-					</div>
 			</div>
-	    </div>
-		
-		
-
-	</div>
-	
-	<div id="footer">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-4">
-					<h4>My Bunker</h4>
-					<p>
-						Some Address 987,<br/>
-						+34 9054 5455, <br/>
-						Madrid, Spain.
-					</p>
-				</div>
-				
-				<div class="col-lg-4">
-					<h4>My Links</h4>
-					<p>
-						<a href="#">Dribbble</a><br/>
-						<a href="#">Twitter</a><br/>
-						<a href="#">Facebook</a>
-					</p>
-				</div>
-				
-				<div class="col-lg-4">
-					<h4>About Stanley</h4>
-					<p>This cute theme was created to showcase your work in a simple way. Use it wisely.</p>
-				</div>
-			
-			</div>
-		
 		</div>
-	</div>
-	
-	<script>
-	function Logout()
-	{
-		document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
-		window.location = "http://localhost:8080/savDarbas/login/index.html";
-	}
-	function updateUser()
-	{
-		var result = $.ajax({
-				type: "POST",
-				url: "/savDarbas/php/updateForm.php",
-				async: false,
-				data:{ 
-					name:$("#name").val(), 
-					lastName:$("#lastName").val(), 
-					username:$("#username").val(), 
-					accountType:$("#accountType").val()
-				}
-			}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
-	}
-	
-	function GetFormData()
-	{
-		var result = $.ajax({
-			type: "POST",
-			url: "/savDarbas/php/getForm.php",
-			async: false
-		}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
-		
-		return result;
-	}
-	
-	function ApplyUserData()
-	{
-		var userData = GetFormData();
-		
-		$("#name").val(userData[0]);
-		$("#lastName").val(userData[1]);
-		$("#username").val(userData[2]);
-		$("#accountType").val(userData[3]);
-	}
-	
-	$(document).ready(function() {
-		ApplyUserData();
-		
-	});
-	</script>
-    <script src="assets/js/bootstrap.min.js"></script>
-  </body>
+		<div id="ww">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8 col-lg-offset-2 centered">
+						<img src="assets/img/user.png" alt="Stanley">
+						<h1>Vartotojo duomenys</h1>
+					</div>
+				</div>
+				<div>
+					<form class="form-horizontal">
+						<div class="form-group">
+							<label for="name">Vardas:</label>
+							<input class="form-control" id="name" placeholder="Jūsų vardas" >
+						</div>
+						<div class="form-group">
+							<label for="lastName">Pavardė:</label>
+							<input class="form-control" id="lastName" placeholder="Jūsų pavardė" >
+						</div>
+						<div class="form-group">
+							<label for="username">Vartotojo vardas:</label>
+							<input class="form-control" id="username" placeholder="Jūsų slapyvardis" >
+						</div>
+						<div class="form-group">
+							<label for="userType">Vartotojo tipas:</label>
+							<input class="form-control" id="accountType" readonly>
+						</div>
+						<div class="form-group">
+							<button type="button" class="btn btn-default" onclick="updateUser()">Atnaujinti duomenis</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		</div>
+		<div id="footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-7">
+						<h4>T120B145 Kompiuterių tinklai ir internetinės technologijos</h4>
+						<p>
+							Dėstytojai: <br/>
+							Rimantas Kavaliūnas<br/>
+							Gytis Vilutis 
+						</p>
+					</div>
+					<div class="col-lg-5">
+						<h4>Nuorodos</h4>
+						<p>
+							<a href="http://www.w3schools.com/php/php_intro.asp" target="_blank">PHP Intro</a><br/>
+							<a href="http://getbootstrap.com/" target="_blank">Bootstrap</a><br/>
+							<a href="https://www.arduino.cc/en/Guide/Introduction" target="_blank">Arduino</a><br/>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			function Logout()
+			{
+				document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
+				window.location = "http://localhost:8080/savDarbas/login/index.html";
+			}
+			function updateUser()
+			{
+				var result = $.ajax({
+						type: "POST",
+						url: "/savDarbas/php/updateForm.php",
+						async: false,
+						data:{ 
+							name:$("#name").val(), 
+							lastName:$("#lastName").val(), 
+							username:$("#username").val(), 
+							accountType:$("#accountType").val()
+						}
+					}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
+			}
+			
+			function GetFormData()
+			{
+				var result = $.ajax({
+					type: "POST",
+					url: "/savDarbas/php/getForm.php",
+					async: false
+				}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
+				
+				return result;
+			}
+			
+			function ApplyUserData()
+			{
+				var userData = GetFormData();
+				
+				$("#name").val(userData[0]);
+				$("#lastName").val(userData[1]);
+				$("#username").val(userData[2]);
+				$("#accountType").val(userData[3]);
+			}
+			
+			$(document).ready(function() {
+				ApplyUserData();
+				
+			});
+		</script>
+		<script src="assets/js/bootstrap.min.js"></script>
+	</body>
 </html>
