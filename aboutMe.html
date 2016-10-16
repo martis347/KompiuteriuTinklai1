@@ -48,6 +48,7 @@
 			<li><a href="sensors.html" style="display:none" id="sensors">Jutikliai</a></li>
 			<li><a href="sensorsHistory.html" style="display:none" id="sensorsHistory">Jutiklių istorija</a></li>
 			<li><a href="sensorsControl.html" style="display:none" id="sensorsControl">Jutiklių valdymas</a></li>
+			<li><a href="sensorsRules.html" style="display:none" id="sensorsRules">Jutiklių taisyklės</a></li>
             <li><a href="allHistory.html" style="display:none" id="allHistory">Visa istorija</a></li>
             <li><a href="allUsers.html" style="display:none" id="allUsers">Visi vartotojai</a></li>
             <li><a href="aboutMe.html">Mano duomenys</a></li>
@@ -152,6 +153,9 @@
 					accountType:$("#accountType").val()
 				}
 			}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
+			
+			
+		window.location.reload();
 	}
 	
 	function GetFormData()
