@@ -40,7 +40,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.html">DUOMENYS</a>
+          <a class="navbar-brand" href="index.html">Titulinis</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -52,7 +52,7 @@
             <li><a href="allHistory.html" style="display:none" id="allHistory">Visa istorija</a></li>
             <li><a href="allUsers.html" style="display:none" id="allUsers">Visi vartotojai</a></li>
             <li><a href="aboutMe.html">Mano duomenys</a></li>
-			<li><a href="#" onclick="Logout()">Atsijungti</a></li>
+			<li><a href="#" style="color:darkgreen;" class="glyphicon glyphicon-log-out" onclick="Logout()">Atsijungti</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -153,9 +153,6 @@
 					accountType:$("#accountType").val()
 				}
 			}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
-			
-			
-		window.location.reload();
 	}
 	
 	function GetFormData()
