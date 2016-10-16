@@ -4,8 +4,8 @@ $rule = $_REQUEST['rule'];
 include 'config.php';
 // Create connection
 $conn = new mysqli($db_config['servername'], $db_config['username'], $db_config['password'], $db_config['dbname']);
-
 $conn->set_charset("utf8");
+
 
 if ($conn->connect_error) {
 	echo "connectionError";
