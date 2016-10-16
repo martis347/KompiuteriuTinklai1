@@ -240,3 +240,10 @@ bt {
 	
 	color: #1abc9c;
 }
+#rulesTable i{
+	cursor:pointer;
+	opacity:0;
+}
+#rulesTable tr:hover i{
+	opacity: 1;
+}
