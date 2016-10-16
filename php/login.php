@@ -26,7 +26,12 @@ $success = !is_null($userId);
 if($success)
 {
 	$userToken = uniqid();
-	setcookie("authToken", $userToken, 0, '/', 'ktu.lt');
+	$domain = "ktu.lt";
+	if($_SERVER['SERVER_NAME'] == "localhost")
+	{
+		$domain = "localhost";
+	}
+	setcookie("authToken", $userToken, 0, '/', $domain);
 	$sql = "DELETE FROM authentication_token WHERE userId = '" . $userId . "'";
 	$conn->query($sql);
 	
