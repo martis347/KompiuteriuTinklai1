@@ -31,8 +31,6 @@
 		}
 	</style>
 	<body>
-		<input type="range" id="aRange" value="20">
-		<input type="range" id="bRange" value="40">
 		<div class="navbar navbar-inverse navbar-static-top">
 			<div class="container">
 				<div class="navbar-header">
@@ -64,7 +62,7 @@
 					<div class="col-lg-8 col-lg-offset-2 centered">
 						<h1>Sensorių informacija</h1>
 					</div>
-				</div>
+				
 				<div style="display:-webkit-inline-box">
 					<div id="table" style="width:40%">
 						<label style="font-size: 20px;">Jutiklių informacija realiu laiku</label>
@@ -83,7 +81,15 @@
 							</tr>
 						</table>
 					</div>
+					
 				</div>
+				<div id="updateInterval">
+						<label>Duombazės atnaujinimo intervalas: </label>
+						<input type="text" id="interval" style="width:32px;" value="10"></input>
+						<label>minučių</label>
+
+					</div>
+					</div>
 			</div>
 		</div>
 		<div id="footer">
@@ -109,6 +115,7 @@
 			</div>
 		</div>
 		<script>
+			var arduinoValues = [0, 0];
 			function Logout()
 			{
 				document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
@@ -116,19 +123,41 @@
 			}
 			function GetTemperature()
 			{
-				var items = [];
-				var fakedValues = [$("#aRange").val(), $("#bRange").val()];
+				var sensorNames = [];
 				$("#table tr td:even").each(function(item, value){
-					items.push(value.innerHTML);
+					sensorNames.push(value.innerHTML);
 				});
 				var result = $.ajax({
 					type: "POST",
 					url: "/savDarbas/php/updateSensors.php",
 					async: false,
-					data:{sensorNames:items, values: fakedValues}
+					data:{sensorNames:sensorNames, values: arduinoValues }
 				}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
 				
 				return result;
+			}
+			function AddTemperatureHistory()
+			{
+				var sensorNames = [];
+				$("#table tr td:even").each(function(item, value){
+					sensorNames.push(value.innerHTML);
+				});
+				var result = $.ajax({
+					type: "POST",
+					url: "/savDarbas/php/updateSensorsHistory.php",
+					async: false,
+					data:{sensorNames:sensorNames, values: arduinoValues }
+				});
+			}
+			function CreateWebSocket()
+			{
+				var socket = new WebSocket("ws://localhost:8081");
+				socket.onmessage = showData;
+			}
+			 
+			function showData(result) 
+			{
+				arduinoValues = result.data.split(" ");
 			}
 			function GetSensors()
 			{
@@ -155,9 +184,15 @@
 						if(sensor !== "")
 						{
 							$("#table tbody").append("<tr> ");
-							$("#table tbody").append("<tr><td>" + sensor + "</td> <td> 0</td></tr>");
+							$("#table tbody").append("<tr><td>" + sensor + "</td> <td> !</td></tr>");
 						}
 					})
+					CreateWebSocket();
+					if(arduinoValues.length != $("#table tr td:even").length)
+					{
+						window.alert("Nesutampa Arduino jutiklių kiekis su sistemoje įvestu kiekiu!");
+						return;
+					}
 					
 					var temperatures = GetTemperature();
 				
@@ -192,12 +227,10 @@
 					$("#alerts tbody").find("tr:gt(0)").remove();
 					allAlerts.forEach(function(value){
 						$("#alerts tbody").append("<tr><td>" + value + "</td></tr>");
-					});
-					
-					
-					
-					
-				}, 2000);		
+					});	
+				}, 2000);	
+
+				setInterval(AddTemperatureHistory() , $("#interval").val() * 60 * 1000);	
 			});
 		</script>
 		<script src="assets/js/bootstrap.min.js"></script>
