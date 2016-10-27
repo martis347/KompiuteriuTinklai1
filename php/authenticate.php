@@ -15,6 +15,7 @@ if ($conn->connect_error) {
 }
 
 $sql = "SELECT userId, endTime FROM authentication_token WHERE token='" . $_COOKIE["authToken"] . "'";
+
 $result = $conn->query($sql);
 
 $row = $result->fetch_assoc();
@@ -46,7 +47,7 @@ if(!is_null($userId))
 		$sql = "UPDATE authentication_token SET endTime = '" . $time . "' WHERE token = '" . $_COOKIE["authToken"] . "'";
 		$conn->query($sql);
 		echo "true";
-		printf(" %s", $seconds_diff);
+
 		return "true";
 	}
 	

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="\savDarbas\assets\js\jquery.min.js"></script>
+<script src="\savDarbas\assets\js\authenticate.js"></script>
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,13 +9,12 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 		<link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
-		<title>Jutiklių valdymas </title>
+		<title>Titulinis </title>
 		<link href="assets/css/bootstrap.css" rel="stylesheet">
 		<link href="assets/css/main.css" rel="stylesheet">
-		<script src="\savDarbas\assets\js\jquery.min.js"></script>
+
 		<script src="assets/js/hover.zoom.js"></script>
 		<script src="assets/js/hover.zoom.conf.js"></script>
-		<script src="\savDarbas\assets\js\authenticate.js"></script>
 	</head>
 	<body>
 		<div class="navbar navbar-inverse navbar-static-top">
@@ -30,9 +31,9 @@
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="work.html" style="display:none">Work</a></li>
 						<li><a href="sensors.html" style="display:none" id="sensors">Jutikliai</a></li>
-						<li><a href="sensorsHistory.html" style="display:none" id="sensorsHistory">Jutiklių istorija</a></li>
-						<li><a href="sensorsControl.html" style="display:none" id="sensorsControl">Jutiklių valdymas</a></li>
-						<li><a href="sensorsRules.html" style="display:none" id="sensorsRules">Jutiklių taisyklės</a></li>
+						<li><a href="sensorsHistory.html" style="display:none" id="sensorsHistory">Jutikliu istorija</a></li>
+						<li><a href="sensorsControl.html" style="display:none" id="sensorsControl">Jutikliu valdymas</a></li>
+						<li><a href="sensorsRules.html" style="display:none" id="sensorsRules">Jutikliu taisykles</a></li>
 						<li><a href="allUsers.html" style="display:none" id="allUsers">Visų vartotojų jutikliai</a></li>
 						<li><a href="aboutMe.html">Mano duomenys</a></li>
 						<li><a href="#" style="color:darkgreen;" class="glyphicon glyphicon-log-out" onclick="Logout()">Atsijungti</a></li>
@@ -43,28 +44,38 @@
 		<div id="ww">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-3 col-lg-offset-2 left ">
-						<label for="usersSensors">Mano turimi jutikliai: </label>
-						<select multiple class="form-control" id="sel" > </select>
-						<button type="button" class="btn btn-default" onclick="DeleteSensors()">Trinti</button>
+					<div class="form-group"style="width:25%;">
+						<label for="usersList">Pasirinkite vartotoja:</label>
+						<select class="form-control" id="usersList">
+						<input type="button" onClick="GetSensors()" value="Gauti jutiklius">
+						</select>
 					</div>
-					<!-- /col-lg-8 -->
-					<div class="col-lg-3 col-lg-offset-2 right ">
+					<div id="rulesTable" style="width:20%">
+						<label style="font-size: 20px;">Jutikliu informacija realiu laiku</label>
+						<table class="table table-striped table-hover">
+							<tr>
+								<th>Jutiklio pavadinimas</th>
+								<th></th>
+							</tr>
+						</table>
+					</div>
+					<div class="form-group"style="width:15%;">
 						<label for="addSensor">Pridėti jutiklį</label>
 						<input class="form-control" id="newSensor">
 						<button type="button" class="btn btn-default" onclick="AddSensor()">Pridėti</button>
-					</div>
 				</div>
+				</div>
+				
 			</div>
 		</div>
 		<div id="footer">
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-7">
-						<h4>T120B145 Kompiuterių tinklai ir internetinės technologijos</h4>
+						<h4>T120B145 Kompiuteriu tinklai ir internetines technologijos</h4>
 						<p>
-							Dėstytojai: <br/>
-							Rimantas Kavaliūnas<br/>
+							Destytojai: <br/>
+							Rimantas Kavaliunas<br/>
 							Gytis Vilutis 
 						</p>
 					</div>
@@ -85,28 +96,62 @@
 				document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
 				window.location = window.location.hostname === "markan2.stud.if.ktu.lt" ? "http://markan2.stud.if.ktu.lt/savDarbas/login/index.html" : "http://localhost:8080/savDarbas/login/index.html";
 			}
-			
+			function GetUsersList()
+			{
+				var result = $.ajax({
+						type: "POST",
+						url: "/savDarbas/php/getUsers.php",
+						async: false
+					}).responseText.replace(/(\r\n|\r)/gm,"").split("\n");
+					
+				result.forEach(function(user){
+					if(user != "")
+					{
+						$("#usersList").append("<option>" + user + "</option>");					
+					}
+				})
+			}
 			function GetSensors()
 			{
 				var result = $.ajax({
 					type: "POST",
 					url: "/savDarbas/php/getSensors.php",
-					async: false
+					async: false,
+					data: {username: $("#usersList option:selected").val().split(" ")[0].replace("'", "").replace("'", "")}
 				}).responseText.replace(/(\r\n|\n|\r)/gm,"").split(" ");
-				
+				$("#rulesTable tbody td").remove();
+
 				if(result[0] == "0")
 				{
-					return [ ];
+					result = [ ];
+					$("#rulesTable tbody").append("<tr><td>Nėra rezultatų</td></tr>");
 				}
-				return result;
+				result.forEach(function(sensor){
+						if(sensor !== "")
+						{
+							$("#rulesTable tbody").append("<tr><td>" + sensor + "</td><td><i class='glyphicon glyphicon-remove' onClick=DeleteSensors('" + sensor + "')></i></td></tr>");
+
+						}
+					});
 			}
-			
-			function DeleteSensors()
+			function AddSensor()
 			{
-				var sensors = [];
-				$("#sel option:selected").each(function(a,b){
-				   sensors.push(b.innerHTML);
-				})
+				var result = $.ajax({
+					type: "POST",
+					url: "/savDarbas/php/addSensor.php",
+					async: false,
+					data:{sensor:$("#newSensor").val(), username: $("#usersList option:selected").val().split(" ")[0].replace("'", "").replace("'", "")}
+				}).responseText;
+				
+				$("#rulesTable tbody").append("<tr><td>" + $("#newSensor").val() + "</td><td><i class='glyphicon glyphicon-remove' onClick=DeleteSensors('" + $("#newSensor").val() + "')></i></td></tr>");
+
+				
+				$("#newSensor").val("");
+			}
+			function DeleteSensors(value)
+			{
+				var sensors = [value];
+				
 				var result = $.ajax({
 					type: "POST",
 					url: "/savDarbas/php/deleteSensors.php",
@@ -115,36 +160,16 @@
 				}).responseText;
 				
 				
-				$("#sel option:selected").each(function(a,b){
-				   $(this).remove()
-				})
-			}
-			
-			function AddSensor()
-			{
-				var result = $.ajax({
-					type: "POST",
-					url: "/savDarbas/php/addSensor.php",
-					async: false,
-					data:{sensor:$("#newSensor").val()}
-				}).responseText;
-				
-				$("#sel").append("<option>" + $("#newSensor").val() + "</option>");
-				$("#newSensor").val("");
-				
-			}
-			
-			$(document).ready(function() {
-				var sensors = GetSensors();
-				sensors.forEach(function(sensor){
-					if(sensor !== "")
-					{
-						$("#sel").append("<option>" + sensor + "</option>");
+				$("#rulesTable tr td").each(function(a, b){ 
+					if(b.textContent === value){
+						$(this).parent().remove();
 					}
-				})
-				
-				
+				});
+			}
+			$(document).ready(function() {
+				GetUsersList();
 			});
+
 		</script>
 		<script src="assets/js/bootstrap.min.js"></script>
 	</body>

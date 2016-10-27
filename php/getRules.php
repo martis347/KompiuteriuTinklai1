@@ -1,3 +1,7 @@
+
+<?php
+error_reporting(0);
+?>
 <?php
 include 'config.php';
 // Create connection

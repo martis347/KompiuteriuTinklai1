@@ -48,8 +48,7 @@
 						<li><a href="sensorsHistory.html" style="display:none" id="sensorsHistory">Jutiklių istorija</a></li>
 						<li><a href="sensorsControl.html" style="display:none" id="sensorsControl">Jutiklių valdymas</a></li>
 						<li><a href="sensorsRules.html" style="display:none" id="sensorsRules">Jutiklių taisyklės</a></li>
-						<li><a href="about.html" style="display:none" id="allHistory">Visa istorija</a></li>
-						<li><a href="blog.html" style="display:none" id="allUsers">Visi vartotojai</a></li>
+						<li><a href="allUsers.html" style="display:none" id="allUsers">Visų vartotojų jutikliai</a></li>
 						<li><a href="aboutMe.html">Mano duomenys</a></li>
 						<li><a href="#" style="color:darkgreen;" class="glyphicon glyphicon-log-out" onclick="Logout()">Atsijungti</a></li>
 					</ul>
@@ -85,7 +84,7 @@
 				</div>
 				<div id="updateInterval">
 						<label>Duombazės atnaujinimo intervalas: </label>
-						<input type="text" id="interval" style="width:32px;" value="10"></input>
+						<input type="text" id="interval" style="width:32px;" value="0.1"></input>
 						<label>minučių</label>
 
 					</div>
@@ -138,16 +137,21 @@
 			}
 			function AddTemperatureHistory()
 			{
-				var sensorNames = [];
-				$("#table tr td:even").each(function(item, value){
-					sensorNames.push(value.innerHTML);
-				});
-				var result = $.ajax({
-					type: "POST",
-					url: "/savDarbas/php/updateSensorsHistory.php",
-					async: false,
-					data:{sensorNames:sensorNames, values: arduinoValues }
-				});
+				if(arduinoValues[0] != 0)
+				{
+					var sensorNames = [];
+					$("#table tr td:even").each(function(item, value){
+						sensorNames.push(value.innerHTML);
+					});
+					var result = $.ajax({
+						type: "POST",
+						url: "/savDarbas/php/updateSensorsHistory.php",
+						async: false,
+						data:{sensorNames:sensorNames, values: arduinoValues }
+					}).responseText;
+				}
+				window.setTimeout(AddTemperatureHistory, $("#interval").val() * 60 * 1000);
+
 			}
 			function CreateWebSocket()
 			{
@@ -186,7 +190,7 @@
 							$("#table tbody").append("<tr> ");
 							$("#table tbody").append("<tr><td>" + sensor + "</td> <td> !</td></tr>");
 						}
-					})
+					});
 					CreateWebSocket();
 					if(arduinoValues.length != $("#table tr td:even").length)
 					{
@@ -229,8 +233,7 @@
 						$("#alerts tbody").append("<tr><td>" + value + "</td></tr>");
 					});	
 				}, 2000);	
-
-				setInterval(AddTemperatureHistory() , $("#interval").val() * 60 * 1000);	
+				AddTemperatureHistory();
 			});
 		</script>
 		<script src="assets/js/bootstrap.min.js"></script>

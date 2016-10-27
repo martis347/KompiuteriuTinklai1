@@ -1,4 +1,7 @@
 <?php
+error_reporting(0);
+?>
+<?php
 $sensorNames = $_REQUEST['toDelete'];
 include 'config.php';
 

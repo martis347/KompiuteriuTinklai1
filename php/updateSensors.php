@@ -1,4 +1,8 @@
 <?php
+error_reporting(0);
+?>
+
+<?php
 $sensorNames = $_REQUEST['sensorNames'];
 $values = $_REQUEST['values'];
 
@@ -9,7 +13,7 @@ $conn = new mysqli($db_config['servername'], $db_config['username'], $db_config[
 $conn->set_charset("utf8");
 for($i = 0; $i< count($values); $i++)
 {
-	array_push($stack, GetData($sensorNames[$i], $values[$i]));
+	array_push($stack, array($sensorNames[$i], $values[$i]));
 }
 
 for($i = 0; $i< count($stack); $i++)
@@ -19,11 +23,6 @@ for($i = 0; $i< count($stack); $i++)
 
 CheckRules($stack);
 
-
-function GetData($arg1, $arg2)
-{
-	return array($arg1, $arg2);
-}
 
 function CheckRules($values)
 {

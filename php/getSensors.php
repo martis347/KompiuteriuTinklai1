@@ -1,6 +1,10 @@
 <?php
+error_reporting(0);
+?>
+<?php
 include 'config.php';
 
+$userUsername = $_REQUEST['username'];	
 
 // Create connection
 $conn = new mysqli($db_config['servername'], $db_config['username'], $db_config['password'], $db_config['dbname']);
@@ -12,6 +16,12 @@ if ($conn->connect_error) {
 }
 
 $sql = "SELECT name FROM sensors JOIN authentication_token on token = '" . $_COOKIE['authToken'] . "' WHERE authentication_token.userId = sensors.userId";
+
+if($userUsername != null)
+{
+	$sql = "SELECT sensors.name FROM sensors JOIN user on username = '" . $userUsername . "' WHERE user.id = sensors.userId";
+	//echo $sql;
+}
 
 
 $result = $conn->query($sql);

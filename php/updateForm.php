@@ -1,4 +1,7 @@
 <?php
+error_reporting(0);
+?>
+<?php
 $name = $_POST["name"];
 $lastName = $_POST['lastName'];
 $userUsername = $_POST['username'];

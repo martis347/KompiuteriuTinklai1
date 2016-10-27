@@ -1,4 +1,7 @@
 <?php
+error_reporting(0);
+?>
+<?php
 $rule = $_REQUEST['rule'];
 
 include 'config.php';
