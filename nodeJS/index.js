@@ -7,7 +7,7 @@ var connections = new Array;          // list of connections to the server
 var serialport = require('serialport');// include the library
 SerialPort = serialport; // make a local instance of it
    
-var myPort = new SerialPort("COM8", {
+var myPort = new SerialPort("COM3", {
 	baudRate: 9600,
 	// look for return and newline at the end of each data packet:
 	parser: serialport.parsers.readline("\n")
